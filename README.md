@@ -9,43 +9,45 @@
 - **Modo Clásico**: 60 segundos para adivinar tantos Pokémon como puedas. Usa filtros de generación y tipos para personalizar tu sesión.
 - **Modo Supervivencia**: Empiezas con 30 segundos. Cada acierto te otorga **+3 segundos**. ¿Cuánto tiempo podrás aguantar?
 
-### 📱 Jugabilidad con Sensores
+### 📱 Jugabilidad con Sensores (Tilt to Play)
 
-- **Tilt to Play**: Inclina el teléfono hacia **adelante** (pantalla al suelo) para marcar como **Correcto**.
-- **Tilt to Skip**: Inclina el teléfono hacia **atrás** (pantalla al techo) para **Pasar** al siguiente.
-- _Nota: Incluye calibración manual en los ajustes para adaptarse a cualquier posición._
+- **Correcto ✅**: Inclina el teléfono hacia **adelante** (pantalla al suelo).
+- **Pasar ⏩**: Inclina el teléfono hacia **atrás** (pantalla al techo).
+- _Ajustes_: Incluye calibración manual de sensibilidad en el menú de ajustes para una experiencia óptima.
+
+### 🌐 Soporte Multi-idioma
+
+- La aplicación está disponible en **Español** e **Inglés**.
+- Cambia el idioma en tiempo real desde los ajustes sin perder tu progreso.
 
 ### 📕 Pokédex Completa & Shiny Hunter
 
-- **1025 Pokémon**: Desde Kanto hasta Paldea, todos están presentes.
-- **Buscador Inteligente**: Filtra por nombre y generación para revisar tus capturas.
-- **Sistema Shiny**: ¡Los Pokémon Shiny pueden aparecer en cualquier momento! Si los aciertas, se marcarán permanentemente en tu Pokédex con una medalla especial.
+- **1025 Pokémon**: Desde Kanto hasta Paldea.
+- **Sistema Shiny ✨**: Los Pokémon Shiny pueden aparecer aleatoriamente. Si los aciertas, se marcan con una estrella plateada en tu Pokédex.
+- **Buscador Inteligente**: Filtra y revisa tus capturas por nombre, generación o tipo.
 
 ### 🏆 Sistema de Logros
 
-- Más de **20 logros** para desbloquear.
-- Categorías: Velocidad, Rachas, Coleccionismo de Tipos y Exploración de Generaciones.
-
-### 📶 Modo Offline - ¡Juega donde quieras!
-
-- **Caché Proactivo**: La aplicación descarga automáticamente los datos básicos e imágenes para que puedas jugar sin conexión a internet.
-- **Rendimiento Optimizado**: Imágenes cacheadas para una carga instantánea y sin esperas.
+- Desbloquea más de **20 logros** únicos.
+- Sigue tu progreso: Novato, Maestro de Kanto, Cazador de Shinies, y muchos más.
+- Notificaciones hápticas al desbloquear nuevos hitos.
 
 ## 🛠️ Stack Tecnológico
 
 - **Framework**: [Flutter](https://flutter.dev)
 - **Gestión de Estado**: [Riverpod](https://riverpod.dev)
 - **API**: [PokéAPI](https://pokeapi.co)
-- **Persistencia**: Shared Preferences
-- **Sensores**: `sensors_plus`
-- **UI/UX**: Diseño premium con fondos dinámicos y micro-animaciones.
+- **UI & Animaciones**: `flutter_animate`, `dynamic_backgrounds`
+- **Sensores & Hardware**: `sensors_plus`, `vibration`, `wakelock_plus`
+- **Persistencia**: `shared_preferences`
+- **Networking**: `http`, `cached_network_image`
 
 ## 🚀 Cómo Empezar
 
 ### Requisitos Previos
 
 - Flutter SDK (v3.0.0 o superior)
-- Android Studio / VS Code con plugins de Flutter y Dart.
+- Git instalado
 
 ### Instalación
 
@@ -72,4 +74,4 @@ flutter build apk --release
 
 ---
 
-_Desarrollado con ❤️ para entrenadores Pokémon._
+_Desarrollado con ❤️ para entrenadores Pokémon. ¡Hazte con todos!_
