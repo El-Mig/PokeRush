@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../providers/pokedex_provider.dart';
 import '../providers/game_provider.dart';
+import 'package:pokerush/l10n/app_localizations.dart';
 
 class PokedexScreen extends ConsumerStatefulWidget {
   const PokedexScreen({super.key});
@@ -46,6 +47,7 @@ class _PokedexScreenState extends ConsumerState<PokedexScreen> {
     final caughtPokemon = ref.watch(pokedexProvider);
     final pokemonService = ref.read(pokemonServiceProvider);
     final allNames = pokemonService.allPokemonData;
+    final l10n = AppLocalizations.of(context)!;
 
     // Filter IDs
     List<int> filteredIds = [];
@@ -82,7 +84,7 @@ class _PokedexScreenState extends ConsumerState<PokedexScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
       appBar: AppBar(
-        title: const Text('POKÉDEX'),
+        title: Text(l10n.pokedex.toUpperCase()),
         backgroundColor: const Color(0xFF3B1010),
         foregroundColor: Colors.white,
       ),
@@ -95,7 +97,7 @@ class _PokedexScreenState extends ConsumerState<PokedexScreen> {
               onChanged: (value) => setState(() => _searchQuery = value),
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
-                hintText: "Buscar por nombre...",
+                hintText: l10n.searchPokemon,
                 hintStyle: const TextStyle(color: Colors.white38),
                 prefixIcon: const Icon(Icons.search, color: Colors.white38),
                 filled: true,
@@ -123,7 +125,11 @@ class _PokedexScreenState extends ConsumerState<PokedexScreen> {
                 return Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: ChoiceChip(
-                    label: Text(isAll ? "Todos" : "Gen $gen"),
+                    label: Text(isAll
+                        ? l10n.spanish == "Español"
+                            ? "Todos"
+                            : "All"
+                        : "Gen $gen"),
                     selected: isSelected,
                     onSelected: (selected) {
                       setState(() => _selectedGen = selected ? gen : null);
@@ -177,9 +183,9 @@ class _PokedexScreenState extends ConsumerState<PokedexScreen> {
                     ),
                   )
                 : filteredIds.isEmpty
-                    ? const Center(
-                        child: Text("No se encontraron Pokémon",
-                            style: TextStyle(color: Colors.white38)))
+                    ? Center(
+                        child: Text(l10n.noPokemonFound,
+                            style: const TextStyle(color: Colors.white38)))
                     : GridView.builder(
                         padding: const EdgeInsets.all(10),
                         gridDelegate:

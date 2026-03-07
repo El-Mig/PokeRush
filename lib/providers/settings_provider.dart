@@ -8,12 +8,14 @@ class SettingsState {
   final bool dynamicBackgrounds;
   final double correctAngle; // Negative (e.g., -6.0)
   final double skipAngle; // Positive (e.g., 8.5)
+  final String locale; // 'es' or 'en'
 
   SettingsState({
     this.gameMode = GameMode.classic,
     this.dynamicBackgrounds = true,
     this.correctAngle = -6.0,
     this.skipAngle = 8.5,
+    this.locale = 'es',
   });
 
   SettingsState copyWith({
@@ -21,12 +23,14 @@ class SettingsState {
     bool? dynamicBackgrounds,
     double? correctAngle,
     double? skipAngle,
+    String? locale,
   }) {
     return SettingsState(
       gameMode: gameMode ?? this.gameMode,
       dynamicBackgrounds: dynamicBackgrounds ?? this.dynamicBackgrounds,
       correctAngle: correctAngle ?? this.correctAngle,
       skipAngle: skipAngle ?? this.skipAngle,
+      locale: locale ?? this.locale,
     );
   }
 }
@@ -43,6 +47,7 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
       dynamicBackgrounds: prefs.getBool('dynamicBackgrounds') ?? true,
       correctAngle: prefs.getDouble('correctAngle') ?? -6.0,
       skipAngle: prefs.getDouble('skipAngle') ?? 8.5,
+      locale: prefs.getString('locale') ?? 'es',
     );
   }
 
@@ -63,6 +68,12 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setDouble('correctAngle', correct);
     await prefs.setDouble('skipAngle', skip);
+  }
+
+  Future<void> setLocale(String locale) async {
+    state = state.copyWith(locale: locale);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('locale', locale);
   }
 }
 

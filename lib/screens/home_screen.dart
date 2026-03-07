@@ -6,6 +6,7 @@ import 'pokedex_screen.dart';
 import '../providers/filter_provider.dart';
 import '../providers/game_provider.dart';
 import '../providers/settings_provider.dart';
+import 'package:pokerush/l10n/app_localizations.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -13,6 +14,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return PopScope(
       canPop: false,
@@ -93,18 +95,18 @@ class HomeScreen extends ConsumerWidget {
                               canvasColor: Colors.transparent,
                             ),
                             child: SegmentedButton<GameMode>(
-                              segments: const [
+                              segments: [
                                 ButtonSegment<GameMode>(
                                   value: GameMode.classic,
-                                  label: Text('CLÁSICO',
-                                      style: TextStyle(fontSize: 12)),
-                                  icon: Icon(Icons.timer_outlined),
+                                  label: Text(l10n.classic,
+                                      style: const TextStyle(fontSize: 12)),
+                                  icon: const Icon(Icons.timer_outlined),
                                 ),
                                 ButtonSegment<GameMode>(
                                   value: GameMode.survival,
-                                  label: Text('SUPERVIVENCIA',
-                                      style: TextStyle(fontSize: 12)),
-                                  icon: Icon(Icons.bolt),
+                                  label: Text(l10n.survival,
+                                      style: const TextStyle(fontSize: 12)),
+                                  icon: const Icon(Icons.bolt),
                                 ),
                               ],
                               selected: {settings.gameMode},
@@ -158,17 +160,19 @@ class HomeScreen extends ConsumerWidget {
                                   context: context,
                                   builder: (context) => AlertDialog(
                                     backgroundColor: const Color(0xFF2C2C2C),
-                                    title: const Text('Sin Pokémon',
-                                        style: TextStyle(color: Colors.white)),
-                                    content: const Text(
-                                      'No hay Pokémon con esos filtros. Por favor, ajusta tu selección en los ajustes.',
-                                      style: TextStyle(color: Colors.white70),
+                                    title: Text(l10n.noPokemonTitle,
+                                        style: const TextStyle(
+                                            color: Colors.white)),
+                                    content: Text(
+                                      l10n.noPokemonContent,
+                                      style: const TextStyle(
+                                          color: Colors.white70),
                                     ),
                                     actions: [
                                       TextButton(
                                         onPressed: () => Navigator.pop(context),
-                                        child: const Text('ACEPTAR',
-                                            style: TextStyle(
+                                        child: Text(l10n.accept,
+                                            style: const TextStyle(
                                                 color: Color(0xFFD4A017))),
                                       ),
                                     ],
@@ -204,11 +208,11 @@ class HomeScreen extends ConsumerWidget {
                                   color: Colors.black26, width: 2),
                             ),
                           ),
-                          child: const Text('¡JUGAR!'),
+                          child: Text(l10n.play),
                         ),
                         const SizedBox(height: 50),
                         Text(
-                          'Coloca el teléfono en tu frente\nInclina hacia adelante para ACIERTO\nInclina hacia atrás para PASAR',
+                          l10n.instructions,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               color: Colors.white.withOpacity(0.4),

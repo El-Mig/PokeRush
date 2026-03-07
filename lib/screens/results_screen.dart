@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/game_provider.dart';
+import 'package:pokerush/l10n/app_localizations.dart';
 
 class ResultsScreen extends ConsumerWidget {
   const ResultsScreen({super.key});
@@ -8,10 +9,11 @@ class ResultsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(gameProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Resultados'),
+        title: Text(l10n.gameOver),
         centerTitle: true,
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFBC2C2C), // Muted Crimson
@@ -22,7 +24,7 @@ class ResultsScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.all(24.0),
             child: Text(
-              'Total: ${gameState.correctPokemon.length} Aciertos',
+              '${l10n.score}: ${gameState.correctPokemon.length}',
               style: const TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
@@ -34,10 +36,10 @@ class ResultsScreen extends ConsumerWidget {
             child: ListView(
               children: [
                 if (gameState.correctPokemon.isNotEmpty) ...[
-                  const ListTile(
+                  ListTile(
                     title: Text(
-                      '¡ADIVINADOS!',
-                      style: TextStyle(
+                      l10n.correct.toUpperCase(),
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.green,
                       ),
@@ -55,10 +57,10 @@ class ResultsScreen extends ConsumerWidget {
                 ],
                 if (gameState.skippedPokemon.isNotEmpty) ...[
                   const Divider(),
-                  const ListTile(
+                  ListTile(
                     title: Text(
-                      'PASADOS',
-                      style: TextStyle(
+                      l10n.skipped.toUpperCase(),
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.red,
                       ),
@@ -91,9 +93,10 @@ class ResultsScreen extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: const Text(
-                'VOLVER AL INICIO',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              child: Text(
+                l10n.backToHome.toUpperCase(),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
           ),

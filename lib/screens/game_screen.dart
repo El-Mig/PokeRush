@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../providers/game_provider.dart';
 import '../providers/settings_provider.dart';
+import 'package:pokerush/l10n/app_localizations.dart';
 import 'results_screen.dart';
 
 class GameScreen extends ConsumerStatefulWidget {
@@ -42,6 +43,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   @override
   Widget build(BuildContext context) {
     final gameState = ref.watch(gameProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     // Navigate to results when finished
     if (gameState.status == GameStatus.finished) {
@@ -54,17 +56,17 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     }
 
     if (gameState.status == GameStatus.loading) {
-      return const Scaffold(
+      return Scaffold(
         backgroundColor: Colors.black,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircularProgressIndicator(color: Colors.white),
-              SizedBox(height: 20),
+              const CircularProgressIndicator(color: Colors.white),
+              const SizedBox(height: 20),
               Text(
-                "CARGANDO POKÉMONS...",
-                style: TextStyle(color: Colors.white, fontSize: 18),
+                l10n.ready, // repurposed for loading
+                style: const TextStyle(color: Colors.white, fontSize: 18),
               ),
             ],
           ),
@@ -88,9 +90,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
-                "¡PREPÁRATE!",
-                style: TextStyle(
+              Text(
+                l10n.ready,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 32,
                   letterSpacing: 4,
@@ -137,8 +139,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text("VOLVER",
-                    style: TextStyle(color: Colors.white70)),
+                child: Text(l10n.backToHome,
+                    style: const TextStyle(color: Colors.white70)),
               ),
             ],
           ),
@@ -154,10 +156,10 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
     if (gameState.isCorrectTilt) {
       backgroundColor = const Color(0xFF1E8449); // Muted Dark Emerald
-      feedbackText = "¡CORRECTO!";
+      feedbackText = l10n.correct;
     } else if (gameState.isSkipTilt) {
       backgroundColor = const Color(0xFF922B21); // Muted Dark Iron Red
-      feedbackText = "PASAR";
+      feedbackText = l10n.skipped;
     } else if (settings.dynamicBackgrounds && currentPokemon != null) {
       backgroundColor =
           _getTypeColor(currentPokemon.types.first).withOpacity(0.8);
@@ -299,7 +301,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                         ),
                       ] else
                         const Text(
-                          "CARGANDO...",
+                          "...",
                           style: TextStyle(fontSize: 40, color: Colors.white),
                         ),
                     ],
@@ -314,7 +316,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             bottom: 20,
             left: 20,
             child: Text(
-              'Aciertos: ${gameState.correctPokemon.length}',
+              '${l10n.score}: ${gameState.correctPokemon.length}',
               style: const TextStyle(
                 fontSize: 24,
                 color: Colors.white,
