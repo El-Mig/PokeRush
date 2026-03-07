@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/filter_provider.dart';
 import '../providers/settings_provider.dart';
+import 'package:pokerush/l10n/app_localizations.dart';
 import '../providers/achievement_provider.dart';
 
 class FilterScreen extends ConsumerWidget {
@@ -13,6 +14,7 @@ class FilterScreen extends ConsumerWidget {
     final notifier = ref.read(filterProvider.notifier);
     final settings = ref.watch(settingsProvider);
     final settingsNotifier = ref.read(settingsProvider.notifier);
+    final l10n = AppLocalizations.of(context)!;
     final achievements = ref.watch(achievementProvider);
 
     final allTypes = [
@@ -39,14 +41,14 @@ class FilterScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A1A),
       appBar: AppBar(
-        title: const Text('Filtros Pokémon'),
+        title: Text(l10n.filters),
         backgroundColor: const Color(0xFF3B1010),
         foregroundColor: Colors.white,
         actions: [
           IconButton(
             onPressed: () => notifier.resetFilters(),
             icon: const Icon(Icons.refresh),
-            tooltip: 'Reiniciar Filtros',
+            tooltip: l10n.resetFilters,
           ),
         ],
       ),
@@ -55,9 +57,9 @@ class FilterScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'GENERACIONES',
-              style: TextStyle(
+            Text(
+              l10n.generations,
+              style: const TextStyle(
                 color: Colors.white70,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -87,9 +89,9 @@ class FilterScreen extends ConsumerWidget {
               },
             ),
             const SizedBox(height: 40),
-            const Text(
-              'TIPOS',
-              style: TextStyle(
+            Text(
+              l10n.types,
+              style: const TextStyle(
                 color: Colors.white70,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -112,7 +114,7 @@ class FilterScreen extends ConsumerWidget {
             const SizedBox(height: 40),
             Center(
               child: Text(
-                'Nota: Si no seleccionas ningún tipo,\nse mostrarán todos.',
+                l10n.filterNote,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.3),
@@ -125,13 +127,47 @@ class FilterScreen extends ConsumerWidget {
 
             const SizedBox(height: 40),
 
+            // LANGUAGE
+            _sectionHeader(l10n.language),
+            const SizedBox(height: 15),
+            Center(
+              child: SegmentedButton<String>(
+                segments: [
+                  ButtonSegment<String>(
+                    value: 'es',
+                    label: Text(l10n.spanish),
+                  ),
+                  ButtonSegment<String>(
+                    value: 'en',
+                    label: Text(l10n.english),
+                  ),
+                ],
+                selected: {settings.locale},
+                onSelectionChanged: (Set<String> newSelection) {
+                  settingsNotifier.setLocale(newSelection.first);
+                },
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                    (Set<WidgetState> states) {
+                      if (states.contains(WidgetState.selected)) {
+                        return const Color(0xFFD4A017);
+                      }
+                      return Colors.white10;
+                    },
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 40),
+
             // VISUAL SETTINGS
-            _sectionHeader('AJUSTES VISUALES'),
+            _sectionHeader(l10n.visualSettings),
             const SizedBox(height: 5),
             SwitchListTile(
-              title: const Text('Fondos Dinámicos',
-                  style: TextStyle(color: Colors.white)),
-              subtitle: Text('Cambia el color según el tipo del Pokémon.',
+              title: Text(l10n.dynamicBackgrounds,
+                  style: const TextStyle(color: Colors.white)),
+              subtitle: Text(l10n.dynamicBackgroundsDesc,
                   style: TextStyle(color: Colors.white.withOpacity(0.5))),
               value: settings.dynamicBackgrounds,
               onChanged: (val) =>
@@ -142,10 +178,10 @@ class FilterScreen extends ConsumerWidget {
             const SizedBox(height: 40),
 
             // CALIBRATION
-            _sectionHeader('CALIBRACIÓN DE SENSOR'),
+            _sectionHeader(l10n.sensorCalibration),
             const SizedBox(height: 15),
             _CalibrationSlider(
-              label: 'Sensibilidad Acierto (Hacia Adelante)',
+              label: l10n.correctSensitivity,
               value: settings.correctAngle,
               min: -15.0,
               max: -2.0,
@@ -154,7 +190,7 @@ class FilterScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 10),
             _CalibrationSlider(
-              label: 'Sensibilidad Paso (Hacia Atrás)',
+              label: l10n.skipSensitivity,
               value: settings.skipAngle,
               min: 2.0,
               max: 15.0,
@@ -165,7 +201,7 @@ class FilterScreen extends ConsumerWidget {
             const SizedBox(height: 40),
 
             // ACHIEVEMENTS
-            _sectionHeader('LOGROS'),
+            _sectionHeader(l10n.achievements),
             const SizedBox(height: 15),
             ...achievements.map((ach) => _AchievementTile(achievement: ach)),
 

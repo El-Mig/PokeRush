@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:pokerush/l10n/app_localizations.dart';
+import 'providers/settings_provider.dart';
 import 'screens/home_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // We'll handle orientation locking in the GameScreen,
-  // but keep the app orientation-aware for the Home and Results screens.
   runApp(
     const ProviderScope(
       child: PokeRushApp(),
@@ -14,14 +14,27 @@ void main() {
   );
 }
 
-class PokeRushApp extends StatelessWidget {
+class PokeRushApp extends ConsumerWidget {
   const PokeRushApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(settingsProvider);
+
     return MaterialApp(
       title: 'PokeRush - Heads Up',
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('es'),
+        Locale('en'),
+      ],
+      locale: Locale(settings.locale),
       theme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.dark,
