@@ -1,0 +1,31 @@
+name: pokerush
+description: A Pokémon themed Heads Up charades game.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  sensors_plus: ^6.1.1
+  http: ^1.2.1
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+  cached_network_image: ^3.3.1
+  flutter_animate: ^4.5.0
+  wakelock_plus: ^1.4.0
+  vibration: ^3.1.8
+  shared_preferences: ^2.5.4
+  path_provider: ^2.1.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  build_runner: ^2.4.9
+  riverpod_generator: ^2.4.0
+
+flutter:
+  uses-material-design: true
