@@ -2,8 +2,6 @@
 
 ¡Bienvenido a **PokeRush**! Una experiencia vibrante y dinámica de "Heads Up" (Adivina la palabra) centrada en el universo Pokémon. Pon a prueba tus conocimientos, compite contra el reloj y completa tu Pokédex en este juego diseñado para fans de todas las generaciones.
 
-![Banner](https://via.placeholder.com/800x200?text=PokeRush+-+The+Ultimate+Pokemon+Heads+Up)
-
 ## ✨ Características Principales
 
 ### 🕹️ Modos de Juego
