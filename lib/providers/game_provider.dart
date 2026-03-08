@@ -11,6 +11,7 @@ import 'filter_provider.dart';
 import 'settings_provider.dart';
 import 'achievement_provider.dart';
 import 'pokedex_provider.dart';
+import 'stats_provider.dart';
 
 enum GameStatus { initial, loading, starting, playing, finished }
 
@@ -83,8 +84,7 @@ class GameNotifier extends StateNotifier<GameState> {
     try {
       state = GameState(status: GameStatus.loading);
       await _pokemonService.initialize();
-      // Proactively cache Gen 1 in background
-      _pokemonService.cacheBatchDetails(start: 1, end: 151);
+      _ref.read(statsProvider.notifier).addGame();
 
       final filterState = _ref.read(filterProvider);
       final settings = _ref.read(settingsProvider);
@@ -92,6 +92,8 @@ class GameNotifier extends StateNotifier<GameState> {
       _sessionQueue = await _pokemonService.preparePool(
         selectedGens: filterState.selectedGenerations,
         selectedTypes: filterState.selectedTypes,
+        difficulty: filterState.difficulty,
+        category: filterState.category,
       );
 
       if (_sessionQueue.isEmpty) {
@@ -281,6 +283,11 @@ class GameNotifier extends StateNotifier<GameState> {
         if (totalShinies >= 5) {
           _ref.read(achievementProvider.notifier).unlock('cazador_shinies');
         }
+
+        _ref.read(statsProvider.notifier).addCorrect(
+              state.currentPokemon!.isShiny,
+              _currentStreak + 1,
+            );
       }
 
       _currentStreak++;

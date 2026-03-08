@@ -20,11 +20,16 @@ class PokemonService {
     final cachedData = prefs.getString('pokemon_basic_data');
     if (cachedData != null) {
       final List decoded = json.decode(cachedData);
-      _allPokemonData =
-          decoded.map((e) => Map<String, String>.from(e)).toList();
-      _totalCount = _allPokemonData.length;
-      print('DEBUG: Loaded ${_allPokemonData.length} Pokemon from cache');
-      return;
+      // Validate that the cache is complete (at least 1000 Pokemon)
+      if (decoded.length >= 1000) {
+        _allPokemonData =
+            decoded.map((e) => Map<String, String>.from(e)).toList();
+        _totalCount = _allPokemonData.length;
+        print('DEBUG: Loaded ${_allPokemonData.length} Pokemon from cache');
+        return;
+      } else {
+        print('DEBUG: Incomplete cache detected. Forcing a fresh fetch.');
+      }
     }
 
     try {
@@ -82,8 +87,15 @@ class PokemonService {
           const Duration(seconds: 8)); // Timeout to prevent getting stuck
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        // Save to cache for offline use
-        await prefs.setString(cacheKey, response.body);
+
+        // Try to save to cache for offline use, but ignore if it fails (QuotaExceededError on Web)
+        try {
+          await prefs.setString(cacheKey, response.body);
+        } catch (cacheError) {
+          print(
+              'DEBUG: Could not cache $url (cache full or error): $cacheError');
+        }
+
         return Pokemon.fromJson(data);
       }
     } catch (e) {
@@ -132,6 +144,8 @@ class PokemonService {
   Future<List<String>> preparePool({
     required List<int> selectedGens,
     required List<String> selectedTypes,
+    String difficulty = 'Normal',
+    String category = 'All',
   }) async {
     await initialize();
 
@@ -148,11 +162,22 @@ class PokemonService {
         final ids = await _fetchIdsByType(type.toLowerCase());
         typeIds.addAll(ids);
       }
-      // Intersection: IDs that are in selected generations AND have selected types
       genIds = genIds.intersection(typeIds);
     }
 
-    // 3. Convert IDs to PokeAPI URLs
+    // 3. Filter by Category
+    if (category != 'All') {
+      final categoryIds = _getIdsForCategory(category);
+      genIds = genIds.intersection(categoryIds);
+    }
+
+    // 4. Filter by Difficulty (Popularity)
+    if (difficulty == 'Normal') {
+      // In the future, we could filter out obscure middle evolutions here.
+      // For now, allow all explicitly selected generations to appear.
+    }
+
+    // 5. Convert IDs to PokeAPI URLs
     final List<String> allPoolUrls = [];
     for (var pokemonData in _allPokemonData) {
       final id = _getIdFromUrl(pokemonData['url']!);
@@ -161,32 +186,98 @@ class PokemonService {
       }
     }
 
-    final prefs = await SharedPreferences.getInstance();
+    if (allPoolUrls.isEmpty) return [];
 
-    // 4. If we have some cached data, prefer it when pool is large
-    // This helps with the "repetitive" issue by ensuring we don't pick
-    // too many non-cached items that will just be skipped.
-    final List<String> cachedUrls =
-        allPoolUrls.where((url) => isCached(url, prefs)).toList();
-
-    List<String> finalUrls;
-    if (cachedUrls.length >= 10) {
-      // If we have enough cached items, mix them in or favor them
-      // This ensures offline play feels solid
-      cachedUrls.shuffle();
-      finalUrls = cachedUrls;
-
-      // Add some non-cached ones in case user has internet now
-      final nonCached =
-          allPoolUrls.where((url) => !isCached(url, prefs)).toList();
-      nonCached.shuffle();
-      finalUrls.addAll(nonCached.take(20));
-    } else {
-      finalUrls = allPoolUrls;
+    // 6. Ensure the queue is long enough for extended play (Survival)
+    List<String> finalUrls = [];
+    const targetSize = 300;
+    while (finalUrls.length < targetSize) {
+      var copy = List<String>.from(allPoolUrls);
+      copy.shuffle();
+      finalUrls.addAll(copy);
     }
 
-    finalUrls.shuffle();
+    // 7. Pull one cached item to the very front for instant startup
+    final prefs = await SharedPreferences.getInstance();
+    final firstCachedIndex =
+        finalUrls.indexWhere((url) => isCached(url, prefs));
+
+    if (firstCachedIndex > 0) {
+      final cachedUrl = finalUrls.removeAt(firstCachedIndex);
+      finalUrls.insert(0, cachedUrl);
+    }
+
     return finalUrls;
+  }
+
+  Set<int> _getIdsForCategory(String category) {
+    switch (category) {
+      case 'Starters':
+        return {
+          1, 4, 7, // Gen 1
+          152, 155, 158, // Gen 2
+          252, 255, 258, // Gen 3
+          387, 390, 393, // Gen 4
+          495, 498, 501, // Gen 5
+          650, 653, 656, // Gen 6
+          722, 725, 728, // Gen 7
+          810, 813, 816, // Gen 8
+          906, 909, 912, // Gen 9
+          // Evolutions
+          2, 3, 5, 6, 8, 9,
+          153, 154, 156, 157, 159, 160,
+          253, 254, 256, 257, 259, 260,
+          388, 389, 391, 392, 394, 395,
+          496, 497, 499, 500, 502, 503,
+          651, 652, 654, 655, 657, 658,
+          723, 724, 726, 727, 729, 730,
+          811, 812, 814, 815, 817, 818,
+          907, 908, 910, 911, 913, 914,
+        };
+      case 'Legendaries':
+        return {
+          144, 145, 146, 150, 151, // Gen 1
+          243, 244, 245, 249, 250, 251, // Gen 2
+          377, 378, 379, 380, 381, 382, 383, 384, 385, 386, // Gen 3
+          480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492,
+          493, // Gen 4
+          494, 638, 639, 640, 641, 642, 643, 644, 645, 646, 647, 648,
+          649, // Gen 5
+          716, 717, 718, 719, 720, 721, // Gen 6
+          772,
+          773,
+          785,
+          786,
+          787,
+          788,
+          789,
+          790,
+          791,
+          792,
+          793,
+          794,
+          795,
+          796,
+          797,
+          798,
+          799,
+          800,
+          801,
+          802,
+          803,
+          804,
+          805,
+          806,
+          807,
+          808,
+          809, // Gen 7
+          888, 889, 890, 891, 892, 893, 894, 895, 896, 897, 898, // Gen 8
+          1001, 1002, 1003, 1004, 1007, 1008,
+          1010 // Gen 9 (Incomplete but representative)
+        };
+      default:
+        return {};
+    }
   }
 
   Future<Set<int>> _fetchIdsByType(String type) async {
@@ -209,9 +300,14 @@ class PokemonService {
           return _getIdFromUrl(url) ?? 0;
         }).toSet();
 
-        // Save to cache
-        await prefs.setStringList(
-            cacheKey, ids.map((i) => i.toString()).toList());
+        // Try to save to cache, but ignore if it fails
+        try {
+          await prefs.setStringList(
+              cacheKey, ids.map((i) => i.toString()).toList());
+        } catch (e) {
+          print('DEBUG: Could not cache type $type list (cache full): $e');
+        }
+
         return ids;
       }
     } catch (e) {

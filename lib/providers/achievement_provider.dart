@@ -3,22 +3,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Achievement {
   final String id;
-  final String title;
-  final String description;
   final bool isUnlocked;
 
   Achievement({
     required this.id,
-    required this.title,
-    required this.description,
     this.isUnlocked = false,
   });
 
   Achievement copyWith({bool? isUnlocked}) {
     return Achievement(
       id: id,
-      title: title,
-      description: description,
       isUnlocked: isUnlocked ?? this.isUnlocked,
     );
   }
@@ -30,99 +24,25 @@ class AchievementNotifier extends StateNotifier<List<Achievement>> {
   }
 
   static final List<Achievement> _initialAchievements = [
-    Achievement(
-        id: 'first_win',
-        title: 'Novato',
-        description: 'Adivina tu primer Pokémon'),
-    Achievement(
-        id: 'gen1_master',
-        title: 'Maestro de Kanto',
-        description: 'Adivina 50 Pokémon de la Gen 1'),
-    Achievement(
-      id: 'shiny_found',
-      title: '¡Shiny Encontrado!',
-      description: 'Encuentra un Pokémon variocolor.',
-    ),
-    Achievement(
-      id: 'survival_pro',
-      title: 'Pro en Supervivencia',
-      description: 'Aguanta más de 2 minutos en modo supervivencia.',
-    ),
-    Achievement(
-      id: 'velocista',
-      title: 'Velocista',
-      description: 'Acierta 10 Pokémon en menos de 30 segundos.',
-    ),
-    Achievement(
-      id: 'racha_bronce',
-      title: 'Racha de Bronce',
-      description: '10 aciertos seguidos sin saltar ninguno.',
-    ),
-    Achievement(
-      id: 'racha_plata',
-      title: 'Racha de Plata',
-      description: '25 aciertos seguidos.',
-    ),
-    Achievement(
-      id: 'racha_oro',
-      title: 'Racha de Oro',
-      description: '50 aciertos seguidos.',
-    ),
-    Achievement(
-      id: 'intocable',
-      title: 'Intocable',
-      description: 'Termina una partida clásica sin usar "Paso".',
-    ),
-    Achievement(
-      id: 'maestro_elemental',
-      title: 'Maestro Elemental',
-      description: 'Acierta un Pokémon de cada tipo en una sesión.',
-    ),
-    Achievement(
-      id: 'explorador_johto',
-      title: 'Explorador Johto',
-      description: 'Acierta 50 Pokémon de la Gen 2.',
-    ),
-    Achievement(
-      id: 'leyenda_hoenn',
-      title: 'Leyenda de Hoenn',
-      description: 'Acierta 50 Pokémon de la Gen 3.',
-    ),
-    Achievement(
-      id: 'especialista',
-      title: 'Especialista',
-      description: 'Acierta 20 Pokémon de un mismo tipo en una partida.',
-    ),
-    Achievement(
-      id: 'dios_supervivencia',
-      title: 'Dios de la Supervivencia',
-      description: 'Aguanta 5 minutos en modo Supervivencia.',
-    ),
-    Achievement(
-      id: 'a_contrarreloj',
-      title: 'A Contrarreloj',
-      description: 'Acierta cuando queden menos de 5 segundos.',
-    ),
-    Achievement(
-      id: 'cazador_shinies',
-      title: 'Cazador de Shinies',
-      description: 'Encuentra 5 Pokémon Shiny en total.',
-    ),
-    Achievement(
-      id: 'dia_suerte',
-      title: 'Día de Suerte',
-      description: 'Encuentra 2 Shinies en una misma partida.',
-    ),
-    Achievement(
-      id: 'buho_nocturno',
-      title: 'Búho Nocturno',
-      description: 'Juega una partida después de medianoche.',
-    ),
-    Achievement(
-      id: 'madrugador',
-      title: 'Madrugador',
-      description: 'Juega una partida antes de las 8 AM.',
-    ),
+    Achievement(id: 'first_win'),
+    Achievement(id: 'gen1_master'),
+    Achievement(id: 'shiny_found'),
+    Achievement(id: 'survival_pro'),
+    Achievement(id: 'velocista'),
+    Achievement(id: 'racha_bronce'),
+    Achievement(id: 'racha_plata'),
+    Achievement(id: 'racha_oro'),
+    Achievement(id: 'intocable'),
+    Achievement(id: 'maestro_elemental'),
+    Achievement(id: 'explorador_johto'),
+    Achievement(id: 'leyenda_hoenn'),
+    Achievement(id: 'especialista'),
+    Achievement(id: 'dios_supervivencia'),
+    Achievement(id: 'a_contrarreloj'),
+    Achievement(id: 'cazador_shinies'),
+    Achievement(id: 'dia_suerte'),
+    Achievement(id: 'buho_nocturno'),
+    Achievement(id: 'madrugador'),
   ];
 
   Future<void> _loadAchievements() async {

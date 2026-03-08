@@ -44,7 +44,6 @@ class PokeRushApp extends ConsumerWidget {
           primary: const Color(0xFFBC2C2C),
           secondary: const Color(0xFFD4A017), // Golden Yellow
           surface: const Color(0xFF1A1A1A),
-          background: const Color(0xFF1A1A1A),
           brightness: Brightness.dark,
         ),
         textTheme: const TextTheme(

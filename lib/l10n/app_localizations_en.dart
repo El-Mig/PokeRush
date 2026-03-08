@@ -91,6 +91,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get time => 'TIME';
 
   @override
+  String get difficulty => 'DIFFICULTY';
+
+  @override
+  String get difficultyNormal => 'Normal';
+
+  @override
+  String get difficultyExpert => 'Expert';
+
+  @override
+  String get thematicCategories => 'THEMATIC CATEGORIES';
+
+  @override
+  String get all => 'All';
+
+  @override
+  String get starters => 'Starters';
+
+  @override
+  String get legendaries => 'Legendaries';
+
+  @override
   String get pokedex => 'Pokédex';
 
   @override
@@ -116,4 +137,182 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backToHome => 'BACK TO HOME';
+
+  @override
+  String get tabFilters => 'Filters';
+
+  @override
+  String get tabGame => 'Game';
+
+  @override
+  String get tabSettings => 'Settings';
+
+  @override
+  String get tabAccessibility => 'Accesibilidad';
+
+  @override
+  String get tabAchievements => 'Achievements';
+
+  @override
+  String get trainer => 'TRAINER';
+
+  @override
+  String get trainerCard => 'TRAINER CARD';
+
+  @override
+  String get changeName => 'Change Name';
+
+  @override
+  String get selectAvatar => 'Select Avatar';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get enterName => 'Enter your name';
+
+  @override
+  String get chooseFromGallery => 'Upload from Gallery';
+
+  @override
+  String get removePhoto => 'Remove Photo';
+
+  @override
+  String get shinies => 'SHINIES';
+
+  @override
+  String get bestStreak => 'MAX STREAK';
+
+  @override
+  String get gamesPlayed => 'Games Played';
+
+  @override
+  String get totalCorrectStats => 'Total Correct';
+
+  @override
+  String get profileKeepGoing => 'Keep going to complete your collection!';
+
+  @override
+  String get ach_first_win_title => 'Rookie';
+
+  @override
+  String get ach_first_win_desc => 'Guess your first Pokémon.';
+
+  @override
+  String get ach_gen1_master_title => 'Kanto Master';
+
+  @override
+  String get ach_gen1_master_desc => 'Guess 50 Gen 1 Pokémon.';
+
+  @override
+  String get ach_shiny_found_title => 'Shiny Found!';
+
+  @override
+  String get ach_shiny_found_desc => 'Find a Shiny Pokémon.';
+
+  @override
+  String get ach_survival_pro_title => 'Survival Pro';
+
+  @override
+  String get ach_survival_pro_desc =>
+      'Survive more than 2 minutes in survival mode.';
+
+  @override
+  String get ach_velocista_title => 'Sprinter';
+
+  @override
+  String get ach_velocista_desc => 'Guess 10 Pokémon in less than 30 seconds.';
+
+  @override
+  String get ach_racha_bronce_title => 'Bronze Streak';
+
+  @override
+  String get ach_racha_bronce_desc =>
+      '10 correct guesses in a row without skipping.';
+
+  @override
+  String get ach_racha_plata_title => 'Silver Streak';
+
+  @override
+  String get ach_racha_plata_desc => '25 correct guesses in a row.';
+
+  @override
+  String get ach_racha_oro_title => 'Gold Streak';
+
+  @override
+  String get ach_racha_oro_desc => '50 correct guesses in a row.';
+
+  @override
+  String get ach_intocable_title => 'Untouchable';
+
+  @override
+  String get ach_intocable_desc =>
+      'Finish a classic game without using \'Pass\'.';
+
+  @override
+  String get ach_maestro_elemental_title => 'Elemental Master';
+
+  @override
+  String get ach_maestro_elemental_desc =>
+      'Guess a Pokémon of each type in one session.';
+
+  @override
+  String get ach_explorador_johto_title => 'Johto Explorer';
+
+  @override
+  String get ach_explorador_johto_desc => 'Guess 50 Gen 2 Pokémon.';
+
+  @override
+  String get ach_leyenda_hoenn_title => 'Hoenn Legend';
+
+  @override
+  String get ach_leyenda_hoenn_desc => 'Guess 50 Gen 3 Pokémon.';
+
+  @override
+  String get ach_especialista_title => 'Specialist';
+
+  @override
+  String get ach_especialista_desc =>
+      'Guess 20 Pokémon of the same type in one game.';
+
+  @override
+  String get ach_dios_supervivencia_title => 'Survival God';
+
+  @override
+  String get ach_dios_supervivencia_desc =>
+      'Survive 5 minutes in Survival mode.';
+
+  @override
+  String get ach_a_contrarreloj_title => 'Against the Clock';
+
+  @override
+  String get ach_a_contrarreloj_desc =>
+      'Guess when less than 5 seconds remain.';
+
+  @override
+  String get ach_cazador_shinies_title => 'Shiny Hunter';
+
+  @override
+  String get ach_cazador_shinies_desc => 'Find 5 Shiny Pokémon in total.';
+
+  @override
+  String get ach_dia_suerte_title => 'Lucky Day';
+
+  @override
+  String get ach_dia_suerte_desc => 'Find 2 Shinies in the same game.';
+
+  @override
+  String get ach_buho_nocturno_title => 'Night Owl';
+
+  @override
+  String get ach_buho_nocturno_desc => 'Play a game after midnight.';
+
+  @override
+  String get ach_madrugador_title => 'Early Bird';
+
+  @override
+  String get ach_madrugador_desc => 'Play a game before 8 AM.';
 }

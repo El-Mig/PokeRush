@@ -9,6 +9,9 @@ class SettingsState {
   final double correctAngle; // Negative (e.g., -6.0)
   final double skipAngle; // Positive (e.g., 8.5)
   final String locale; // 'es' or 'en'
+  final String trainerName;
+  final int avatarIndex;
+  final String? avatarPath;
 
   SettingsState({
     this.gameMode = GameMode.classic,
@@ -16,6 +19,9 @@ class SettingsState {
     this.correctAngle = -6.0,
     this.skipAngle = 8.5,
     this.locale = 'es',
+    this.trainerName = 'ENTRENADOR',
+    this.avatarIndex = 0,
+    this.avatarPath,
   });
 
   SettingsState copyWith({
@@ -24,6 +30,10 @@ class SettingsState {
     double? correctAngle,
     double? skipAngle,
     String? locale,
+    String? trainerName,
+    int? avatarIndex,
+    String? avatarPath,
+    bool clearAvatarPath = false,
   }) {
     return SettingsState(
       gameMode: gameMode ?? this.gameMode,
@@ -31,6 +41,9 @@ class SettingsState {
       correctAngle: correctAngle ?? this.correctAngle,
       skipAngle: skipAngle ?? this.skipAngle,
       locale: locale ?? this.locale,
+      trainerName: trainerName ?? this.trainerName,
+      avatarIndex: avatarIndex ?? this.avatarIndex,
+      avatarPath: clearAvatarPath ? null : (avatarPath ?? this.avatarPath),
     );
   }
 }
@@ -48,6 +61,9 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
       correctAngle: prefs.getDouble('correctAngle') ?? -6.0,
       skipAngle: prefs.getDouble('skipAngle') ?? 8.5,
       locale: prefs.getString('locale') ?? 'es',
+      trainerName: prefs.getString('trainerName') ?? 'ENTRENADOR',
+      avatarIndex: prefs.getInt('avatarIndex') ?? 0,
+      avatarPath: prefs.getString('avatarPath'),
     );
   }
 
@@ -74,6 +90,34 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
     state = state.copyWith(locale: locale);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('locale', locale);
+  }
+
+  Future<void> setTrainerName(String name) async {
+    state = state.copyWith(trainerName: name);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('trainerName', name);
+  }
+
+  Future<void> setAvatarIndex(int index) async {
+    state = state.copyWith(avatarIndex: index, clearAvatarPath: true);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('avatarIndex', index);
+    await prefs.remove('avatarPath');
+  }
+
+  Future<void> setAvatarPath(String? path) async {
+    try {
+      state = state.copyWith(avatarPath: path, clearAvatarPath: path == null);
+      final prefs = await SharedPreferences.getInstance();
+      if (path != null) {
+        await prefs.setString('avatarPath', path);
+      } else {
+        await prefs.remove('avatarPath');
+      }
+    } catch (e) {
+      // Catch storage limits on Web
+      print("Error saving avatar: $e");
+    }
   }
 }
 
