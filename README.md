@@ -8,7 +8,8 @@
 
 - **Modo Clásico**: 60 segundos para adivinar tantos Pokémon como puedas.
 - **Modo Supervivencia**: Empiezas con 30 segundos. Cada acierto te otorga **+3 segundos**.
-- **Dificultad Normal vs Experto**: Juega en modo Normal para una experiencia casual o en Experto con cartas ocultas e información en idiomas aleatorios.
+- **Dificultad Normal**: Muestra la imagen, nombre, generación y tipos del Pokémon.
+- **Dificultad Experto**: Oculta la generación y los tipos elementales. Tus amigos solo verán la imagen y el nombre para describirtelo.
 
 ### 🎛️ Filtros y Categorías Temáticas
 

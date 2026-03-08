@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../providers/game_provider.dart';
 import '../providers/settings_provider.dart';
+import '../providers/filter_provider.dart';
 import 'package:pokerush/l10n/app_localizations.dart';
 import 'results_screen.dart';
 
@@ -43,7 +44,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   @override
   Widget build(BuildContext context) {
     final gameState = ref.watch(gameProvider);
+    final filterState = ref.watch(filterProvider);
     final l10n = AppLocalizations.of(context)!;
+    final settings = ref.watch(settingsProvider);
 
     // Navigate to results when finished
     if (gameState.status == GameStatus.finished) {
@@ -149,7 +152,6 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     }
 
     final currentPokemon = gameState.currentPokemon;
-    final settings = ref.watch(settingsProvider);
 
     Color backgroundColor = const Color(0xFF2C3E50); // Muted Midnight Blue
     String feedbackText = "";
@@ -216,17 +218,19 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                           ),
                         )
                       else if (currentPokemon != null) ...[
-                        // Generation Label
-                        Text(
-                          currentPokemon.generationText,
-                          style: TextStyle(
-                            fontSize: (screenHeight * 0.04).clamp(14.0, 24.0),
-                            color: Colors.white.withOpacity(0.7),
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 1.2,
+                        // Generation Label (Hidden in Expert Mode)
+                        if (filterState.difficulty != 'Expert') ...[
+                          Text(
+                            currentPokemon.generationText,
+                            style: TextStyle(
+                              fontSize: (screenHeight * 0.04).clamp(14.0, 24.0),
+                              color: Colors.white.withOpacity(0.7),
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 1.2,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: screenHeight * 0.01),
+                          SizedBox(height: screenHeight * 0.01),
+                        ],
                         // Sprite Stack (for Shiny Sparkles)
                         Stack(
                           alignment: Alignment.center,
@@ -263,42 +267,43 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                           ),
                         ),
                         SizedBox(height: screenHeight * 0.02),
-                        // Types
-                        Wrap(
-                          // Use Wrap instead of Row to handle small widths
-                          alignment: WrapAlignment.center,
-                          spacing: 12,
-                          runSpacing: 8,
-                          children: currentPokemon.types.map((type) {
-                            return Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                color: _getTypeColor(type),
-                                borderRadius: BorderRadius.circular(15),
-                                border:
-                                    Border.all(color: Colors.white, width: 2),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.3),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Text(
-                                type,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: typeFontSize,
+                        // Types (Hidden in Expert Mode)
+                        if (filterState.difficulty != 'Expert')
+                          Wrap(
+                            // Use Wrap instead of Row to handle small widths
+                            alignment: WrapAlignment.center,
+                            spacing: 12,
+                            runSpacing: 8,
+                            children: currentPokemon.types.map((type) {
+                              return Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 8,
                                 ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
+                                decoration: BoxDecoration(
+                                  color: _getTypeColor(type),
+                                  borderRadius: BorderRadius.circular(15),
+                                  border:
+                                      Border.all(color: Colors.white, width: 2),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.3),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Text(
+                                  type,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: typeFontSize,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
                       ] else
                         const Text(
                           "...",
