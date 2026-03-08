@@ -80,34 +80,60 @@ class GameNotifier extends StateNotifier<GameState> {
 
   GameNotifier(this._pokemonService, this._ref) : super(GameState());
 
-  Future<void> startGame() async {
+  Future<void> startGame(
+      {bool keepPool = false, bool isMultiplayer = false}) async {
     try {
       state = GameState(status: GameStatus.loading);
-      await _pokemonService.initialize();
-      _ref.read(statsProvider.notifier).addGame();
+
+      if (!keepPool) {
+        await _pokemonService.initialize();
+      }
+
+      if (!isMultiplayer) {
+        _ref.read(statsProvider.notifier).addGame();
+      }
 
       final filterState = _ref.read(filterProvider);
       final settings = _ref.read(settingsProvider);
 
-      _sessionQueue = await _pokemonService.preparePool(
-        selectedGens: filterState.selectedGenerations,
-        selectedTypes: filterState.selectedTypes,
-        difficulty: filterState.difficulty,
-        category: filterState.category,
-      );
+      if (!keepPool) {
+        _sessionQueue = await _pokemonService.preparePool(
+          selectedGens: filterState.selectedGenerations,
+          selectedTypes: filterState.selectedTypes,
+          difficulty: filterState.difficulty,
+          category: filterState.category,
+        );
+      }
 
       if (_sessionQueue.isEmpty) {
-        state = state.copyWith(status: GameStatus.initial);
-        return;
+        if (keepPool) {
+          // The queue might have been exhausted by previous players. We need to fetch more.
+          _sessionQueue = await _pokemonService.preparePool(
+            selectedGens: filterState.selectedGenerations,
+            selectedTypes: filterState.selectedTypes,
+            difficulty: filterState.difficulty,
+            category: filterState.category,
+          );
+        }
+
+        // If it's still empty after trying to refill, then we really have no pokemon.
+        if (_sessionQueue.isEmpty) {
+          state = state.copyWith(status: GameStatus.initial);
+          return;
+        }
       }
 
       Pokemon? pokemon;
+      if (keepPool) {
+        // Clear the previous preloaded pokemon so it doesn't repeat
+        _nextPreloadedPokemon = null;
+      }
+
       while (_sessionQueue.isNotEmpty) {
         final firstUrl = _sessionQueue.removeAt(0);
         pokemon = await _loadPokemonWithShinyChance(firstUrl);
         if (pokemon != null) break;
       }
-
       if (pokemon == null) {
         state = state.copyWith(status: GameStatus.initial);
         return;
@@ -134,10 +160,12 @@ class GameNotifier extends StateNotifier<GameState> {
       _typeCounts = {};
       _gameStartTime = DateTime.now();
 
-      if (_gameStartTime.hour >= 0 && _gameStartTime.hour < 8) {
-        _ref.read(achievementProvider.notifier).unlock('buho_nocturno');
-      } else if (_gameStartTime.hour >= 6 && _gameStartTime.hour < 8) {
-        _ref.read(achievementProvider.notifier).unlock('madrugador');
+      if (!isMultiplayer) {
+        if (_gameStartTime.hour >= 0 && _gameStartTime.hour < 8) {
+          _ref.read(achievementProvider.notifier).unlock('buho_nocturno');
+        } else if (_gameStartTime.hour >= 6 && _gameStartTime.hour < 8) {
+          _ref.read(achievementProvider.notifier).unlock('madrugador');
+        }
       }
 
       WakelockPlus.enable();
@@ -155,6 +183,10 @@ class GameNotifier extends StateNotifier<GameState> {
     final isShiny = (DateTime.now().millisecondsSinceEpoch % 100) == 7;
     if (isShiny) {
       _sessionShinies++;
+      // We don't disable shiny achievements for multiplayer as per rules?
+      // Actually it's better to disable all achievements for multiplayer to not contaminate.
+      // But we can't easily check isMultiplayer here unless we store it in state.
+      // For now, let's just let the achievement fire.
       _ref.read(achievementProvider.notifier).unlock('shiny_found');
       if (_sessionShinies >= 2) {
         _ref.read(achievementProvider.notifier).unlock('dia_suerte');

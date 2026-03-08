@@ -7,6 +7,7 @@ import '../providers/filter_provider.dart';
 import '../providers/game_provider.dart';
 import '../providers/settings_provider.dart';
 import 'package:pokerush/l10n/app_localizations.dart';
+import 'player_registration_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -209,6 +210,37 @@ class HomeScreen extends ConsumerWidget {
                             ),
                           ),
                           child: Text(l10n.play),
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const PlayerRegistrationScreen(),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color(0xFF2C3E50), // Muted Midnight Blue
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 40,
+                              vertical: 15,
+                            ),
+                            textStyle: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              side: const BorderSide(
+                                  color: Colors.black26, width: 2),
+                            ),
+                          ),
+                          child: Text(l10n.localTournament),
                         ),
                         const SizedBox(height: 50),
                         Text(

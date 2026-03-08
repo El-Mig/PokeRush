@@ -691,6 +691,96 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Juega una partida antes de las 8 AM.'**
   String get ach_madrugador_desc;
+
+  /// No description provided for @localTournament.
+  ///
+  /// In es, this message translates to:
+  /// **'TORNEO'**
+  String get localTournament;
+
+  /// No description provided for @addPlayer.
+  ///
+  /// In es, this message translates to:
+  /// **'Añadir Jugador'**
+  String get addPlayer;
+
+  /// No description provided for @playerName.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre del Jugador'**
+  String get playerName;
+
+  /// No description provided for @enterPlayerName.
+  ///
+  /// In es, this message translates to:
+  /// **'Mínimo 2 jugadores'**
+  String get enterPlayerName;
+
+  /// No description provided for @startTournament.
+  ///
+  /// In es, this message translates to:
+  /// **'Iniciar Torneo'**
+  String get startTournament;
+
+  /// No description provided for @passPhoneTo.
+  ///
+  /// In es, this message translates to:
+  /// **'Pasa el teléfono a:'**
+  String get passPhoneTo;
+
+  /// No description provided for @imReady.
+  ///
+  /// In es, this message translates to:
+  /// **'¡ESTOY LISTO!'**
+  String get imReady;
+
+  /// No description provided for @tournamentResults.
+  ///
+  /// In es, this message translates to:
+  /// **'Podio de la Liga'**
+  String get tournamentResults;
+
+  /// No description provided for @winner.
+  ///
+  /// In es, this message translates to:
+  /// **'Ganador'**
+  String get winner;
+
+  /// No description provided for @turnCompleted.
+  ///
+  /// In es, this message translates to:
+  /// **'¡Turno completado!'**
+  String get turnCompleted;
+
+  /// No description provided for @offlineStorage.
+  ///
+  /// In es, this message translates to:
+  /// **'Almacenamiento Offline'**
+  String get offlineStorage;
+
+  /// No description provided for @downloadPokedex.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargar Pokédex Completa'**
+  String get downloadPokedex;
+
+  /// No description provided for @downloadingPokedex.
+  ///
+  /// In es, this message translates to:
+  /// **'Descargando... {current}/{total}'**
+  String downloadingPokedex(int current, int total);
+
+  /// No description provided for @downloadComplete.
+  ///
+  /// In es, this message translates to:
+  /// **'Descarga Completada'**
+  String get downloadComplete;
+
+  /// No description provided for @downloadError.
+  ///
+  /// In es, this message translates to:
+  /// **'Error de Descarga'**
+  String get downloadError;
 }
 
 class _AppLocalizationsDelegate

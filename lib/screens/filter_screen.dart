@@ -4,6 +4,7 @@ import '../providers/filter_provider.dart';
 import '../providers/settings_provider.dart';
 import 'package:pokerush/l10n/app_localizations.dart';
 import '../providers/achievement_provider.dart';
+import '../providers/cache_provider.dart';
 import 'trainer_card_screen.dart';
 
 class FilterScreen extends ConsumerWidget {
@@ -258,6 +259,96 @@ class FilterScreen extends ConsumerWidget {
                     onChanged: (val) =>
                         settingsNotifier.toggleDynamicBackgrounds(val),
                     activeColor: const Color(0xFFD4A017),
+                  ),
+                  const SizedBox(height: 40),
+                  _sectionHeader(l10n.offlineStorage),
+                  const SizedBox(height: 15),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      final cacheState = ref.watch(cacheProvider);
+                      final cacheNotifier = ref.read(cacheProvider.notifier);
+
+                      if (cacheState.isDownloading) {
+                        final progress = cacheState.totalItemCount > 0
+                            ? cacheState.currentProgress /
+                                cacheState.totalItemCount
+                            : 0.0;
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              l10n.downloadingPokedex(
+                                  cacheState.currentProgress,
+                                  cacheState.totalItemCount),
+                              style: const TextStyle(color: Colors.white70),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 10),
+                            LinearProgressIndicator(
+                              value: progress,
+                              backgroundColor: Colors.white24,
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                  Color(0xFFD4A017)),
+                              minHeight: 10,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ],
+                        );
+                      }
+
+                      if (cacheState.isComplete) {
+                        return Center(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.check_circle,
+                                  color: Colors.green),
+                              const SizedBox(width: 8),
+                              Text(
+                                l10n.downloadComplete,
+                                style: const TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+
+                      if (cacheState.errorMessage != null) {
+                        return Center(
+                          child: Text(
+                            '${l10n.downloadError}: ${cacheState.errorMessage}',
+                            style: const TextStyle(color: Colors.red),
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      }
+
+                      return SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: () =>
+                              cacheNotifier.downloadEntirePokedex(),
+                          icon: const Icon(Icons.download, color: Colors.black),
+                          label: Text(
+                            l10n.downloadPokedex,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFD4A017), // Gold
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

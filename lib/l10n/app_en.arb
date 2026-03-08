@@ -97,5 +97,27 @@
   "ach_buho_nocturno_title": "Night Owl",
   "ach_buho_nocturno_desc": "Play a game after midnight.",
   "ach_madrugador_title": "Early Bird",
-  "ach_madrugador_desc": "Play a game before 8 AM."
+  "ach_madrugador_desc": "Play a game before 8 AM.",
+  "localTournament": "TOURNAMENT",
+  "addPlayer": "Add Player",
+  "playerName": "Player Name",
+  "enterPlayerName": "Minimum 2 players",
+  "startTournament": "Start Tournament",
+  "passPhoneTo": "Pass the phone to:",
+  "imReady": "I'M READY!",
+  "tournamentResults": "League Podium",
+  "winner": "Winner",
+  "turnCompleted": "Turn Completed!",
+  
+  "offlineStorage": "Offline Storage",
+  "downloadPokedex": "Download entire Pokédex",
+  "downloadingPokedex": "Downloading... {current}/{total}",
+  "@downloadingPokedex": {
+    "placeholders": {
+       "current": {"type": "int"},
+       "total": {"type": "int"}
+     }
+  },
+  "downloadComplete": "Download Complete",
+  "downloadError": "Download Error"
 }

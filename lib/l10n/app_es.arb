@@ -98,5 +98,27 @@
   "ach_buho_nocturno_title": "Búho Nocturno",
   "ach_buho_nocturno_desc": "Juega una partida después de medianoche.",
   "ach_madrugador_title": "Madrugador",
-  "ach_madrugador_desc": "Juega una partida antes de las 8 AM."
+  "ach_madrugador_desc": "Juega una partida antes de las 8 AM.",
+  "localTournament": "TORNEO",
+  "addPlayer": "Añadir Jugador",
+  "playerName": "Nombre del Jugador",
+  "enterPlayerName": "Mínimo 2 jugadores",
+  "startTournament": "Iniciar Torneo",
+  "passPhoneTo": "Pasa el teléfono a:",
+  "imReady": "¡ESTOY LISTO!",
+  "tournamentResults": "Podio de la Liga",
+  "winner": "Ganador",
+  "turnCompleted": "¡Turno completado!",
+
+  "offlineStorage": "Almacenamiento Offline",
+  "downloadPokedex": "Descargar Pokédex Completa",
+  "downloadingPokedex": "Descargando... {current}/{total}",
+  "@downloadingPokedex": {
+    "placeholders": {
+       "current": {"type": "int"},
+       "total": {"type": "int"}
+     }
+  },
+  "downloadComplete": "Descarga Completada",
+  "downloadError": "Error de Descarga"
 }
