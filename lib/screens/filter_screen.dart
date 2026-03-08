@@ -126,6 +126,18 @@ class FilterScreen extends ConsumerWidget {
                       );
                     }).toList(),
                   ),
+                  const SizedBox(height: 15),
+                  Center(
+                    child: Text(
+                      l10n.filterNote,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.3),
+                        fontStyle: FontStyle.italic,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 40),
                   _sectionHeader(l10n.thematicCategories),
                   const SizedBox(height: 15),
@@ -150,18 +162,6 @@ class FilterScreen extends ConsumerWidget {
                         notifier.setCategory(newSelection.first);
                       },
                       style: _segmentedButtonStyle(),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: Text(
-                      l10n.filterNote,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.3),
-                        fontStyle: FontStyle.italic,
-                        fontSize: 12,
-                      ),
                     ),
                   ),
                 ],
