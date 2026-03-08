@@ -4,49 +4,53 @@
 
 ## ✨ Características Principales
 
-### 🕹️ Modos de Juego
+### 🕹️ Modos de Juego y Dificultad
 
-- **Modo Clásico**: 60 segundos para adivinar tantos Pokémon como puedas. Usa filtros de generación y tipos para personalizar tu sesión.
-- **Modo Supervivencia**: Empiezas con 30 segundos. Cada acierto te otorga **+3 segundos**. ¿Cuánto tiempo podrás aguantar?
+- **Modo Clásico**: 60 segundos para adivinar tantos Pokémon como puedas.
+- **Modo Supervivencia**: Empiezas con 30 segundos. Cada acierto te otorga **+3 segundos**.
+- **Dificultad Normal vs Experto**: Juega en modo Normal para una experiencia casual o en Experto con cartas ocultas e información en idiomas aleatorios.
+
+### 🎛️ Filtros y Categorías Temáticas
+
+- **Generaciones y Tipos**: Filtra exactamente qué Pokémon quieres que aparezcan, cruzando hasta 9 generaciones con 18 tipos elementales.
+- **Categorías Temáticas**: Juega partidas exclusivas con la opción "Solo Iniciales" o "Solo Legendarios" para un desafío concentrado.
 
 ### 📱 Jugabilidad con Sensores (Tilt to Play)
 
 - **Correcto ✅**: Inclina el teléfono hacia **adelante** (pantalla al suelo).
 - **Pasar ⏩**: Inclina el teléfono hacia **atrás** (pantalla al techo).
-- _Ajustes_: Incluye calibración manual de sensibilidad en el menú de ajustes para una experiencia óptima.
+- _Ajustes_: Incluye calibración manual de sensibilidad giroscópica en el menú de ajustes.
 
 ### 🌐 Soporte Multi-idioma
 
-- La aplicación está disponible en **Español** e **Inglés**.
-- Cambia el idioma en tiempo real desde los ajustes sin perder tu progreso.
+- La aplicación y la base de datos están disponibles íntegramente en **Español** e **Inglés**.
+- Cambia el idioma en tiempo real desde los ajustes.
 
-### 📕 Pokédex Completa & Shiny Hunter
+### 💳 Trainer Card & Pokédex Completa
 
+- **Trainer Card**: Tu perfil de jugador interactivo que registra tus estadísticas globales, racha máxima, pokémon favoritos (tipos más jugados) e ID único.
 - **1025 Pokémon**: Desde Kanto hasta Paldea.
-- **Sistema Shiny ✨**: Los Pokémon Shiny pueden aparecer aleatoriamente. Si los aciertas, se marcan con una estrella plateada en tu Pokédex.
-- **Buscador Inteligente**: Filtra y revisa tus capturas por nombre, generación o tipo.
+- **Sistema Shiny ✨**: Los Pokémon Shiny pueden aparecer aleatoriamente (1% base). Si los aciertas, se marcan permanentemente en tu Pokédex.
 
 ### 🏆 Sistema de Logros
 
-- Desbloquea más de **20 logros** únicos.
-- Sigue tu progreso: Novato, Maestro de Kanto, Cazador de Shinies, y muchos más.
-- Notificaciones hápticas al desbloquear nuevos hitos.
+- Desbloquea más de **20 logros** únicos basados en tu rendimiento, horario de juego y suerte.
 
-## 🛠️ Stack Tecnológico
+## 🛠️ Stack Tecnológico y Arquitectura
 
-- **Framework**: [Flutter](https://flutter.dev)
-- **Gestión de Estado**: [Riverpod](https://riverpod.dev)
-- **API**: [PokéAPI](https://pokeapi.co)
-- **UI & Animaciones**: `flutter_animate`, `dynamic_backgrounds`
-- **Sensores & Hardware**: `sensors_plus`, `vibration`, `wakelock_plus`
-- **Persistencia**: `shared_preferences`
-- **Networking**: `http`, `cached_network_image`
+- **Framework**: [Flutter](https://flutter.dev) (Cross-platform Mobile, Web & Desktop)
+- **Gestión de Estado Centralizada**: [Riverpod](https://riverpod.dev)
+- **Consumo API HTTP**: [PokéAPI](https://pokeapi.co) con abstracción de repositorio.
+- **Caché Progresiva y Resiliencia**: Sistema inteligente `SharedPreferences` que almacena metadatos y mitigación de errores `QuotaExceededError` en entornos limitados (Web LocalStorage).
+- **Sensores Físicos**: `sensors_plus` para acelerómetro y giroscopio.
+- **UX Inmersivo**: `vibration` (feedback háptico), `wakelock_plus` (anti-screen sleep), `dynamic_backgrounds` (fondos adaptativos).
+- **Localización**: Implementación nativa con `flutter_localizations` y `.arb` files.
 
 ## 🚀 Cómo Empezar
 
 ### Requisitos Previos
 
-- Flutter SDK (v3.0.0 o superior)
+- Flutter SDK (v3.19.0 o superior)
 - Git instalado
 
 ### Instalación
@@ -66,7 +70,7 @@
 
 ## 📦 Generación de APK
 
-Para generar una versión instalable en Android:
+Para generar una versión instalable optimizada (Release) en Android:
 
 ```bash
 flutter build apk --release

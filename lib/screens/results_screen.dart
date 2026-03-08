@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/game_provider.dart';
 import 'package:pokerush/l10n/app_localizations.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class ResultsScreen extends ConsumerWidget {
   const ResultsScreen({super.key});
@@ -30,7 +31,7 @@ class ResultsScreen extends ConsumerWidget {
                 fontWeight: FontWeight.bold,
                 color: Color(0xFFBC2C2C), // Muted Crimson
               ),
-            ),
+            ).animate().scale(duration: 600.ms, curve: Curves.elasticOut),
           ),
           Expanded(
             child: ListView(
@@ -98,7 +99,7 @@ class ResultsScreen extends ConsumerWidget {
                 style:
                     const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-            ),
+            ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.5),
           ),
         ],
       ),

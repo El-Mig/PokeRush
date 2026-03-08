@@ -254,6 +254,48 @@ abstract class AppLocalizations {
   /// **'TIEMPO'**
   String get time;
 
+  /// No description provided for @difficulty.
+  ///
+  /// In es, this message translates to:
+  /// **'DIFICULTAD'**
+  String get difficulty;
+
+  /// No description provided for @difficultyNormal.
+  ///
+  /// In es, this message translates to:
+  /// **'Normal'**
+  String get difficultyNormal;
+
+  /// No description provided for @difficultyExpert.
+  ///
+  /// In es, this message translates to:
+  /// **'Experto'**
+  String get difficultyExpert;
+
+  /// No description provided for @thematicCategories.
+  ///
+  /// In es, this message translates to:
+  /// **'CATEGORÍAS TEMÁTICAS'**
+  String get thematicCategories;
+
+  /// No description provided for @all.
+  ///
+  /// In es, this message translates to:
+  /// **'Todo'**
+  String get all;
+
+  /// No description provided for @starters.
+  ///
+  /// In es, this message translates to:
+  /// **'Iniciales'**
+  String get starters;
+
+  /// No description provided for @legendaries.
+  ///
+  /// In es, this message translates to:
+  /// **'Legendarios'**
+  String get legendaries;
+
   /// No description provided for @pokedex.
   ///
   /// In es, this message translates to:
@@ -307,6 +349,348 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'VOLVER A INICIO'**
   String get backToHome;
+
+  /// No description provided for @tabFilters.
+  ///
+  /// In es, this message translates to:
+  /// **'Filtros'**
+  String get tabFilters;
+
+  /// No description provided for @tabGame.
+  ///
+  /// In es, this message translates to:
+  /// **'Juego'**
+  String get tabGame;
+
+  /// No description provided for @tabSettings.
+  ///
+  /// In es, this message translates to:
+  /// **'Ajustes'**
+  String get tabSettings;
+
+  /// No description provided for @tabAccessibility.
+  ///
+  /// In es, this message translates to:
+  /// **'Accesibilidad'**
+  String get tabAccessibility;
+
+  /// No description provided for @tabAchievements.
+  ///
+  /// In es, this message translates to:
+  /// **'Logros'**
+  String get tabAchievements;
+
+  /// No description provided for @trainer.
+  ///
+  /// In es, this message translates to:
+  /// **'ENTRENADOR'**
+  String get trainer;
+
+  /// No description provided for @trainerCard.
+  ///
+  /// In es, this message translates to:
+  /// **'TARJETA DE ENTRENADOR'**
+  String get trainerCard;
+
+  /// No description provided for @changeName.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar Nombre'**
+  String get changeName;
+
+  /// No description provided for @selectAvatar.
+  ///
+  /// In es, this message translates to:
+  /// **'Seleccionar Avatar'**
+  String get selectAvatar;
+
+  /// No description provided for @save.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar'**
+  String get save;
+
+  /// No description provided for @cancel.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get cancel;
+
+  /// No description provided for @enterName.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce tu nombre'**
+  String get enterName;
+
+  /// No description provided for @chooseFromGallery.
+  ///
+  /// In es, this message translates to:
+  /// **'Subir desde Galería'**
+  String get chooseFromGallery;
+
+  /// No description provided for @removePhoto.
+  ///
+  /// In es, this message translates to:
+  /// **'Quitar Foto'**
+  String get removePhoto;
+
+  /// No description provided for @shinies.
+  ///
+  /// In es, this message translates to:
+  /// **'SHINIES'**
+  String get shinies;
+
+  /// No description provided for @bestStreak.
+  ///
+  /// In es, this message translates to:
+  /// **'RACHA MÁX'**
+  String get bestStreak;
+
+  /// No description provided for @gamesPlayed.
+  ///
+  /// In es, this message translates to:
+  /// **'Partidas Jugadas'**
+  String get gamesPlayed;
+
+  /// No description provided for @totalCorrectStats.
+  ///
+  /// In es, this message translates to:
+  /// **'Aciertos Totales'**
+  String get totalCorrectStats;
+
+  /// No description provided for @profileKeepGoing.
+  ///
+  /// In es, this message translates to:
+  /// **'¡Sigue adelante para completar tu colección!'**
+  String get profileKeepGoing;
+
+  /// No description provided for @ach_first_win_title.
+  ///
+  /// In es, this message translates to:
+  /// **'Novato'**
+  String get ach_first_win_title;
+
+  /// No description provided for @ach_first_win_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'Adivina tu primer Pokémon.'**
+  String get ach_first_win_desc;
+
+  /// No description provided for @ach_gen1_master_title.
+  ///
+  /// In es, this message translates to:
+  /// **'Maestro de Kanto'**
+  String get ach_gen1_master_title;
+
+  /// No description provided for @ach_gen1_master_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'Adivina 50 Pokémon de la Gen 1.'**
+  String get ach_gen1_master_desc;
+
+  /// No description provided for @ach_shiny_found_title.
+  ///
+  /// In es, this message translates to:
+  /// **'¡Shiny Encontrado!'**
+  String get ach_shiny_found_title;
+
+  /// No description provided for @ach_shiny_found_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'Encuentra un Pokémon variocolor.'**
+  String get ach_shiny_found_desc;
+
+  /// No description provided for @ach_survival_pro_title.
+  ///
+  /// In es, this message translates to:
+  /// **'Pro en Supervivencia'**
+  String get ach_survival_pro_title;
+
+  /// No description provided for @ach_survival_pro_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'Aguanta más de 2 minutos en modo supervivencia.'**
+  String get ach_survival_pro_desc;
+
+  /// No description provided for @ach_velocista_title.
+  ///
+  /// In es, this message translates to:
+  /// **'Velocista'**
+  String get ach_velocista_title;
+
+  /// No description provided for @ach_velocista_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'Acierta 10 Pokémon en menos de 30 segundos.'**
+  String get ach_velocista_desc;
+
+  /// No description provided for @ach_racha_bronce_title.
+  ///
+  /// In es, this message translates to:
+  /// **'Racha de Bronce'**
+  String get ach_racha_bronce_title;
+
+  /// No description provided for @ach_racha_bronce_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'10 aciertos seguidos sin saltar ninguno.'**
+  String get ach_racha_bronce_desc;
+
+  /// No description provided for @ach_racha_plata_title.
+  ///
+  /// In es, this message translates to:
+  /// **'Racha de Plata'**
+  String get ach_racha_plata_title;
+
+  /// No description provided for @ach_racha_plata_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'25 aciertos seguidos.'**
+  String get ach_racha_plata_desc;
+
+  /// No description provided for @ach_racha_oro_title.
+  ///
+  /// In es, this message translates to:
+  /// **'Racha de Oro'**
+  String get ach_racha_oro_title;
+
+  /// No description provided for @ach_racha_oro_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'50 aciertos seguidos.'**
+  String get ach_racha_oro_desc;
+
+  /// No description provided for @ach_intocable_title.
+  ///
+  /// In es, this message translates to:
+  /// **'Intocable'**
+  String get ach_intocable_title;
+
+  /// No description provided for @ach_intocable_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'Termina una partida clásica sin usar \'Paso\'.'**
+  String get ach_intocable_desc;
+
+  /// No description provided for @ach_maestro_elemental_title.
+  ///
+  /// In es, this message translates to:
+  /// **'Maestro Elemental'**
+  String get ach_maestro_elemental_title;
+
+  /// No description provided for @ach_maestro_elemental_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'Acierta un Pokémon de cada tipo en una sesión.'**
+  String get ach_maestro_elemental_desc;
+
+  /// No description provided for @ach_explorador_johto_title.
+  ///
+  /// In es, this message translates to:
+  /// **'Explorador Johto'**
+  String get ach_explorador_johto_title;
+
+  /// No description provided for @ach_explorador_johto_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'Acierta 50 Pokémon de la Gen 2.'**
+  String get ach_explorador_johto_desc;
+
+  /// No description provided for @ach_leyenda_hoenn_title.
+  ///
+  /// In es, this message translates to:
+  /// **'Leyenda de Hoenn'**
+  String get ach_leyenda_hoenn_title;
+
+  /// No description provided for @ach_leyenda_hoenn_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'Acierta 50 Pokémon de la Gen 3.'**
+  String get ach_leyenda_hoenn_desc;
+
+  /// No description provided for @ach_especialista_title.
+  ///
+  /// In es, this message translates to:
+  /// **'Especialista'**
+  String get ach_especialista_title;
+
+  /// No description provided for @ach_especialista_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'Acierta 20 Pokémon de un mismo tipo en una partida.'**
+  String get ach_especialista_desc;
+
+  /// No description provided for @ach_dios_supervivencia_title.
+  ///
+  /// In es, this message translates to:
+  /// **'Dios de la Supervivencia'**
+  String get ach_dios_supervivencia_title;
+
+  /// No description provided for @ach_dios_supervivencia_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'Aguanta 5 minutos en modo Supervivencia.'**
+  String get ach_dios_supervivencia_desc;
+
+  /// No description provided for @ach_a_contrarreloj_title.
+  ///
+  /// In es, this message translates to:
+  /// **'A Contrarreloj'**
+  String get ach_a_contrarreloj_title;
+
+  /// No description provided for @ach_a_contrarreloj_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'Acierta cuando queden menos de 5 segundos.'**
+  String get ach_a_contrarreloj_desc;
+
+  /// No description provided for @ach_cazador_shinies_title.
+  ///
+  /// In es, this message translates to:
+  /// **'Cazador de Shinies'**
+  String get ach_cazador_shinies_title;
+
+  /// No description provided for @ach_cazador_shinies_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'Encuentra 5 Pokémon Shiny en total.'**
+  String get ach_cazador_shinies_desc;
+
+  /// No description provided for @ach_dia_suerte_title.
+  ///
+  /// In es, this message translates to:
+  /// **'Día de Suerte'**
+  String get ach_dia_suerte_title;
+
+  /// No description provided for @ach_dia_suerte_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'Encuentra 2 Shinies en una misma partida.'**
+  String get ach_dia_suerte_desc;
+
+  /// No description provided for @ach_buho_nocturno_title.
+  ///
+  /// In es, this message translates to:
+  /// **'Búho Nocturno'**
+  String get ach_buho_nocturno_title;
+
+  /// No description provided for @ach_buho_nocturno_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'Juega una partida después de medianoche.'**
+  String get ach_buho_nocturno_desc;
+
+  /// No description provided for @ach_madrugador_title.
+  ///
+  /// In es, this message translates to:
+  /// **'Madrugador'**
+  String get ach_madrugador_title;
+
+  /// No description provided for @ach_madrugador_desc.
+  ///
+  /// In es, this message translates to:
+  /// **'Juega una partida antes de las 8 AM.'**
+  String get ach_madrugador_desc;
 }
 
 class _AppLocalizationsDelegate
