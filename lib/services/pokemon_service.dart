@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import '../models/pokemon.dart';
 
 class PokemonService {
@@ -141,6 +142,68 @@ class PokemonService {
     return prefs.containsKey('pokemon_detail_$url');
   }
 
+  Future<void> downloadEntirePokedex(
+      void Function(int current, int total) onProgress) async {
+    await initialize();
+    final prefs = await SharedPreferences.getInstance();
+
+    // We will assume 1025 for now, or use _totalCount if initialized
+    final total = _totalCount > 0 ? _totalCount : 1025;
+    final limit = total > 1025 ? 1025 : total; // Limit to Gen 9 for now
+
+    int current = 0;
+
+    for (int i = 1; i <= limit; i++) {
+      final url = '$_baseUrl/pokemon/$i/';
+      final cacheKey = 'pokemon_detail_$url';
+
+      try {
+        String? responseBody;
+
+        // 1. Check if we already have the JSON
+        if (prefs.containsKey(cacheKey)) {
+          responseBody = prefs.getString(cacheKey);
+        } else {
+          // Fetch JSON
+          final response = await http
+              .get(Uri.parse(url))
+              .timeout(const Duration(seconds: 10));
+
+          if (response.statusCode == 200) {
+            responseBody = response.body;
+            try {
+              await prefs.setString(cacheKey, responseBody);
+            } catch (e) {
+              print('DEBUG: SharedPreferences Quota error at Pokemon ID $i');
+              // We could stop the download, but let's try to continue
+            }
+          }
+        }
+
+        // 2. Pre-cache the image
+        if (responseBody != null) {
+          final data = json.decode(responseBody);
+          final pokemon = Pokemon.fromJson(data);
+
+          try {
+            await DefaultCacheManager().downloadFile(pokemon.currentSpriteUrl);
+          } catch (e) {
+            print('DEBUG: Failed to cache image for Pokemon ID $i: $e');
+          }
+        }
+      } catch (e) {
+        print('DEBUG: Error downloading Pokemon ID $i: $e');
+      }
+
+      current++;
+      onProgress(current, limit);
+
+      // Add a tiny delay to give the UI thread a breathing room
+      // and prevent API rate limiting
+      await Future.delayed(const Duration(milliseconds: 50));
+    }
+  }
+
   Future<List<String>> preparePool({
     required List<int> selectedGens,
     required List<String> selectedTypes,
@@ -197,14 +260,24 @@ class PokemonService {
       finalUrls.addAll(copy);
     }
 
-    // 7. Pull one cached item to the very front for instant startup
+    // 7. Pull a random cached item to the very front for instant startup
     final prefs = await SharedPreferences.getInstance();
-    final firstCachedIndex =
-        finalUrls.indexWhere((url) => isCached(url, prefs));
 
-    if (firstCachedIndex > 0) {
-      final cachedUrl = finalUrls.removeAt(firstCachedIndex);
-      finalUrls.insert(0, cachedUrl);
+    final cachedIndices = <int>[];
+    for (int i = 0; i < finalUrls.length; i++) {
+      if (isCached(finalUrls[i], prefs)) {
+        cachedIndices.add(i);
+      }
+    }
+
+    if (cachedIndices.isNotEmpty) {
+      cachedIndices.shuffle();
+      final selectedIndex = cachedIndices.first;
+
+      if (selectedIndex > 0) {
+        final cachedUrl = finalUrls.removeAt(selectedIndex);
+        finalUrls.insert(0, cachedUrl);
+      }
     }
 
     return finalUrls;

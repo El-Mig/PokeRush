@@ -7,9 +7,14 @@ import '../providers/settings_provider.dart';
 import '../providers/filter_provider.dart';
 import 'package:pokerush/l10n/app_localizations.dart';
 import 'results_screen.dart';
+import 'turn_transition_screen.dart';
+import 'tournament_results_screen.dart';
+import '../providers/multiplayer_provider.dart';
+import '../widgets/dynamic_particles_background.dart';
 
 class GameScreen extends ConsumerStatefulWidget {
-  const GameScreen({super.key});
+  final bool isMultiplayer;
+  const GameScreen({super.key, this.isMultiplayer = false});
 
   @override
   ConsumerState<GameScreen> createState() => _GameScreenState();
@@ -29,7 +34,11 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
     // Start the game
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(gameProvider.notifier).startGame();
+      final isFirstTurn = ref.read(multiplayerProvider).currentPlayerIndex == 0;
+      ref.read(gameProvider.notifier).startGame(
+            keepPool: widget.isMultiplayer && !isFirstTurn,
+            isMultiplayer: widget.isMultiplayer,
+          );
     });
   }
 
@@ -51,10 +60,39 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     // Navigate to results when finished
     if (gameState.status == GameStatus.finished) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const ResultsScreen()),
-        );
+        if (widget.isMultiplayer) {
+          final multiplayerNotifier = ref.read(multiplayerProvider.notifier);
+          final multiplayerState = ref.read(multiplayerProvider);
+
+          multiplayerNotifier.recordTurnResults(
+            score: gameState.correctPokemon.length,
+            correctPokemon: gameState.correctPokemon,
+            skippedPokemon: gameState.skippedPokemon,
+          );
+
+          if (multiplayerState.isLastPlayer) {
+            multiplayerNotifier.finishTournament();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const TournamentResultsScreen()),
+            );
+          } else {
+            final nextIndex = multiplayerState.currentPlayerIndex + 1;
+            final nextPlayerName = multiplayerState.players[nextIndex].name;
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      TurnTransitionScreen(nextPlayerName: nextPlayerName)),
+            );
+          }
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const ResultsScreen()),
+          );
+        }
       });
     }
 
@@ -131,7 +169,14 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               ),
               const SizedBox(height: 30),
               ElevatedButton(
-                onPressed: () => ref.read(gameProvider.notifier).startGame(),
+                onPressed: () {
+                  final isFirstTurn = widget.isMultiplayer &&
+                      ref.read(multiplayerProvider).currentPlayerIndex == 0;
+                  ref.read(gameProvider.notifier).startGame(
+                        keepPool: widget.isMultiplayer && !isFirstTurn,
+                        isMultiplayer: widget.isMultiplayer,
+                      );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFBC2C2C),
                   padding:
@@ -171,193 +216,232 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       backgroundColor: backgroundColor,
       body: Stack(
         children: [
-          // Exit Button
-          Positioned(
-            top: 20,
-            left: 20,
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white, size: 30),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ),
-
-          // Timer
-          Positioned(
-            top: 20,
-            right: 20,
-            child: Text(
-              '${gameState.timeLeft}',
-              style: const TextStyle(
-                fontSize: 40,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+          // Background gradient
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  backgroundColor,
+                  backgroundColor.withOpacity(0.5),
+                  Colors.black,
+                ],
               ),
             ),
           ),
 
-          // Current Pokemon / Feedback
-          Center(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final screenHeight = constraints.maxHeight;
-                final spriteSize = (screenHeight * 0.45).clamp(100.0, 250.0);
-                final nameFontSize = (screenHeight * 0.15).clamp(24.0, 64.0);
-                final typeFontSize = (screenHeight * 0.05).clamp(12.0, 20.0);
+          // Particles
+          if (settings.dynamicBackgrounds &&
+              currentPokemon != null &&
+              currentPokemon.isShiny)
+            DynamicParticlesBackground(baseColor: backgroundColor),
 
-                return SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (feedbackText.isNotEmpty)
-                        Text(
-                          feedbackText,
-                          style: TextStyle(
-                            fontSize: (screenHeight * 0.2).clamp(40.0, 100.0),
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      else if (currentPokemon != null) ...[
-                        // Generation Label (Hidden in Expert Mode)
-                        if (filterState.difficulty != 'Expert') ...[
-                          Text(
-                            currentPokemon.generationText,
-                            style: TextStyle(
-                              fontSize: (screenHeight * 0.04).clamp(14.0, 24.0),
-                              color: Colors.white.withOpacity(0.7),
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 1.2,
-                            ),
-                          ),
-                          SizedBox(height: screenHeight * 0.01),
-                        ],
-                        // Sprite Stack (for Shiny Sparkles)
-                        Stack(
-                          alignment: Alignment.center,
+          SafeArea(
+            child: Stack(
+              children: [
+                // Exit Button
+                Positioned(
+                  top: 20,
+                  left: 20,
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back,
+                        color: Colors.white, size: 30),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ),
+
+                // Timer
+                Positioned(
+                  top: 20,
+                  right: 20,
+                  child: Text(
+                    '${gameState.timeLeft}',
+                    style: const TextStyle(
+                      fontSize: 40,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+
+                // Current Pokemon / Feedback
+                Center(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final screenHeight = constraints.maxHeight;
+                      final spriteSize =
+                          (screenHeight * 0.45).clamp(100.0, 250.0);
+                      final nameFontSize =
+                          (screenHeight * 0.15).clamp(24.0, 64.0);
+                      final typeFontSize =
+                          (screenHeight * 0.05).clamp(12.0, 20.0);
+
+                      return SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            if (currentPokemon.isShiny) const _ShinySparkles(),
-                            CachedNetworkImage(
-                              imageUrl: currentPokemon.currentSpriteUrl,
-                              height: spriteSize,
-                              width: spriteSize,
-                              fit: BoxFit.contain,
-                              placeholder: (context, url) => SizedBox(
-                                height: spriteSize,
-                                child: const Center(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
+                            if (feedbackText.isNotEmpty)
+                              Text(
+                                feedbackText,
+                                style: TextStyle(
+                                  fontSize:
+                                      (screenHeight * 0.2).clamp(40.0, 100.0),
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            else if (currentPokemon != null) ...[
+                              // Generation Label (Hidden in Expert Mode)
+                              if (filterState.difficulty != 'Expert') ...[
+                                Text(
+                                  currentPokemon.generationText,
+                                  style: TextStyle(
+                                    fontSize:
+                                        (screenHeight * 0.04).clamp(14.0, 24.0),
+                                    color: Colors.white.withOpacity(0.7),
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: 1.2,
                                   ),
+                                ),
+                                SizedBox(height: screenHeight * 0.01),
+                              ],
+                              // Sprite Stack (for Shiny Sparkles)
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  if (currentPokemon.isShiny)
+                                    const _ShinySparkles(),
+                                  CachedNetworkImage(
+                                    imageUrl: currentPokemon.currentSpriteUrl,
+                                    height: spriteSize,
+                                    width: spriteSize,
+                                    fit: BoxFit.contain,
+                                    placeholder: (context, url) => SizedBox(
+                                      height: spriteSize,
+                                      child: const Center(
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error,
+                                            color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: screenHeight * 0.02),
+                              // Name
+                              Text(
+                                currentPokemon.name,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: nameFontSize,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 2.0,
                                 ),
                               ),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error, color: Colors.white),
-                            ),
+                              SizedBox(height: screenHeight * 0.02),
+                              // Types (Hidden in Expert Mode)
+                              if (filterState.difficulty != 'Expert')
+                                Wrap(
+                                  // Use Wrap instead of Row to handle small widths
+                                  alignment: WrapAlignment.center,
+                                  spacing: 12,
+                                  runSpacing: 8,
+                                  children: currentPokemon.types.map((type) {
+                                    return Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 8,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: _getTypeColor(type),
+                                        borderRadius: BorderRadius.circular(15),
+                                        border: Border.all(
+                                            color: Colors.white, width: 2),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.3),
+                                            blurRadius: 4,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Text(
+                                        type,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: typeFontSize,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                            ] else
+                              const Text(
+                                "...",
+                                style: TextStyle(
+                                    fontSize: 40, color: Colors.white),
+                              ),
                           ],
                         ),
-                        SizedBox(height: screenHeight * 0.02),
-                        // Name
-                        Text(
-                          currentPokemon.name,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: nameFontSize,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 2.0,
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.02),
-                        // Types (Hidden in Expert Mode)
-                        if (filterState.difficulty != 'Expert')
-                          Wrap(
-                            // Use Wrap instead of Row to handle small widths
-                            alignment: WrapAlignment.center,
-                            spacing: 12,
-                            runSpacing: 8,
-                            children: currentPokemon.types.map((type) {
-                              return Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: _getTypeColor(type),
-                                  borderRadius: BorderRadius.circular(15),
-                                  border:
-                                      Border.all(color: Colors.white, width: 2),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.3),
-                                      blurRadius: 4,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: Text(
-                                  type,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: typeFontSize,
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                      ] else
-                        const Text(
-                          "...",
-                          style: TextStyle(fontSize: 40, color: Colors.white),
-                        ),
-                    ],
+                      );
+                    },
                   ),
-                );
-              },
-            ),
-          ),
-
-          // Score Indicator
-          Positioned(
-            bottom: 20,
-            left: 20,
-            child: Text(
-              '${l10n.score}: ${gameState.correctPokemon.length}',
-              style: const TextStyle(
-                fontSize: 24,
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-
-          // Skip Button
-          Positioned(
-            bottom: 20,
-            right: 20,
-            child: InkWell(
-              onTap: () => ref.read(gameProvider.notifier).skipPokemon(),
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.white, width: 2),
                 ),
-                child: const Row(
-                  children: [
-                    Text(
-                      'SKIP ',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+
+                // Score Indicator
+                Positioned(
+                  bottom: 20,
+                  left: 20,
+                  child: Text(
+                    '${l10n.score}: ${gameState.correctPokemon.length}',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+
+                // Skip Button
+                Positioned(
+                  bottom: 20,
+                  right: 20,
+                  child: InkWell(
+                    onTap: () => ref.read(gameProvider.notifier).skipPokemon(),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'SKIP ',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          Icon(Icons.skip_next, color: Colors.white),
+                        ],
                       ),
                     ),
-                    Icon(Icons.skip_next, color: Colors.white),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ],

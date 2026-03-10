@@ -315,4 +315,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ach_madrugador_desc => 'Play a game before 8 AM.';
+
+  @override
+  String get localTournament => 'TOURNAMENT';
+
+  @override
+  String get addPlayer => 'Add Player';
+
+  @override
+  String get playerName => 'Player Name';
+
+  @override
+  String get enterPlayerName => 'Minimum 2 players';
+
+  @override
+  String get startTournament => 'Start Tournament';
+
+  @override
+  String get passPhoneTo => 'Pass the phone to:';
+
+  @override
+  String get imReady => 'I\'M READY!';
+
+  @override
+  String get tournamentResults => 'League Podium';
+
+  @override
+  String get winner => 'Winner';
+
+  @override
+  String get turnCompleted => 'Turn Completed!';
+
+  @override
+  String get offlineStorage => 'Offline Storage';
+
+  @override
+  String get downloadPokedex => 'Download entire Pokédex';
+
+  @override
+  String downloadingPokedex(int current, int total) {
+    return 'Downloading... $current/$total';
+  }
+
+  @override
+  String get downloadComplete => 'Download Complete';
+
+  @override
+  String get downloadError => 'Download Error';
 }
