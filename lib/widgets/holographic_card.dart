@@ -68,56 +68,38 @@ class _HolographicCardState extends State<HolographicCard> {
   Widget build(BuildContext context) {
     if (!widget.isEnabled) return widget.child;
 
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        // The actual card content
-        widget.child,
-
-        // The holographic glare overlay
-        Positioned.fill(
-          child: IgnorePointer(
-            child: ShaderMask(
-              blendMode: BlendMode.overlay,
-              shaderCallback: (bounds) {
-                return LinearGradient(
-                  // Move the gradient based on tilt
-                  begin: Alignment(
-                    _xTilt * 2 - 1,
-                    _yTilt * 2 - 1,
-                  ),
-                  end: Alignment(
-                    _xTilt * 2 + 1,
-                    _yTilt * 2 + 1,
-                  ),
-                  colors: [
-                    Colors.white.withOpacity(0.0),
-                    Colors.white.withOpacity(0.6),
-                    Colors.purpleAccent.withOpacity(0.3),
-                    Colors.cyanAccent.withOpacity(0.3),
-                    Colors.white.withOpacity(0.6),
-                    Colors.white.withOpacity(0.0),
-                  ],
-                  stops: const [
-                    0.0,
-                    0.2,
-                    0.4,
-                    0.6,
-                    0.8,
-                    1.0,
-                  ],
-                ).createShader(bounds);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white, // Required for ShaderMask to work
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
-            ),
+    return ShaderMask(
+      blendMode: BlendMode.overlay,
+      shaderCallback: (bounds) {
+        return LinearGradient(
+          // Move the gradient based on tilt
+          begin: Alignment(
+            _xTilt * 2 - 1,
+            _yTilt * 2 - 1,
           ),
-        ),
-      ],
+          end: Alignment(
+            _xTilt * 2 + 1,
+            _yTilt * 2 + 1,
+          ),
+          colors: [
+            Colors.white.withOpacity(0.0),
+            Colors.white.withOpacity(0.6),
+            Colors.purpleAccent.withOpacity(0.3),
+            Colors.cyanAccent.withOpacity(0.3),
+            Colors.white.withOpacity(0.6),
+            Colors.white.withOpacity(0.0),
+          ],
+          stops: const [
+            0.0,
+            0.2,
+            0.4,
+            0.6,
+            0.8,
+            1.0,
+          ],
+        ).createShader(bounds);
+      },
+      child: widget.child,
     );
   }
 }
